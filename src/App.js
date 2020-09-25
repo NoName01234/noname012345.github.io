@@ -15,12 +15,14 @@ const ROUTES = {
 
 const STORAGE_KEYS = { 
 	STATUS: 'status',
+	STATE: 'state'
 }
 
 const App = () => {
 	const [activePanel, setActivePanel] = useState(ROUTES.INTRO);
 	const [fetchedUser, setUser] = useState(null);
 	const [snackbar, setSnackbar] = useState(null);
+	const [fetchedState, setFetchedState] = useState(false)
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 	const [userHasSeenIntro, setUserHasSeenIntro] = useState(false);
 
@@ -48,7 +50,9 @@ const App = () => {
 								setActivePanel(ROUTES.HOME);
 								setUserHasSeenIntro(true);
 							}
-						break;
+							break;
+						case STORAGE_KEYS.STATE: 
+							setFetchedState(data[key])
 						default:
 						break;
 					}
@@ -70,8 +74,8 @@ const App = () => {
 		fetchData();
 	}, []);
 
-	const go = e => {
-		setActivePanel(e.currentTarget.dataset.to);
+	const go = panel => {
+		setActivePanel(panel);
 	};
 
 	const viewIntro = async function () {
@@ -82,6 +86,7 @@ const App = () => {
 					hasSeenIntro: true
 				})
 			})
+			go(ROUTES.HOME)
 		}
 		catch(error) {
 			setSnackbar(<Snackbar
@@ -97,8 +102,8 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
-			<Home id={ROUTES.HOME} fetchedUser={fetchedUser} go={go} snackbarError={snackbar}/>
-			<Intro id={ROUTES.INTRO} fetchedUser={fetchedUser} go={go} snackbarError={snackbar} userHasSeenIntro={userHasSeenIntro }/>
+			<Home id={ROUTES.HOME} fetchedUser={fetchedUser} fetchedState={fetchedState} snackbarError={snackbar}/>
+			<Intro id={ROUTES.INTRO} fetchedUser={fetchedUser} go={viewIntro} snackbarError={snackbar} userHasSeenIntro={userHasSeenIntro}/>
 		</View>
 	);
 }
