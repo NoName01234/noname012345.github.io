@@ -13,6 +13,11 @@ const ROUTES = {
 	INTRO: 'intro',
 };
 
+const EPICS = {
+	SETTINGS: 'settings',
+	HOME: 'home'
+}
+
 const STORAGE_KEYS = { 
 	STATUS: 'status',
 	STATE: 'state'

@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Sliders from '../components/Sliders'
-import { Panel, PanelHeader } from '@vkontakte/vkui';
+import Epics from '../components/Epics'
+import { Panel, PanelHeader, Group } from '@vkontakte/vkui';
 
+import './Home.css'
 
-
-const Home = ({ id, fetchedState, snackbarError }) => (
+const Home = ({ id, fetchedState, snackbarError, panelheader }) => (
 	<Panel id={id}>
-		<PanelHeader>Example</PanelHeader>
-		{fetchedState && <Sliders fetchedState={fetchedState} snackbarError={snackbarError}/>}
+		{fetchedState && 
+			<Epics/>
+		}
 	</Panel>
 );
+
+const style = {
+
+}
 
 export default Home;
