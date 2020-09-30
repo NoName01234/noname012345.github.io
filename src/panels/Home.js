@@ -1,20 +1,20 @@
 import React, { Fragment } from 'react';
+// import Sliders from '../components/Sliders'
 import Sliders from '../components/Sliders'
-import Epics from '../components/Epics'
-import { Panel, PanelHeader, Group } from '@vkontakte/vkui';
+import { Panel, PanelHeader, Cell, Group } from '@vkontakte/vkui';
+import Icon28Settings from '@vkontakte/icons/dist/28/settings' 
 
 import './Home.css'
 
-const Home = ({ id, fetchedState, snackbarError, panelheader }) => (
+const Home = ({ id, fetchedState, snackbarError, go }) => (
 	<Panel id={id}>
-		{fetchedState && 
-			<Epics/>
-		}
+		<PanelHeader>Электронные книги</PanelHeader>
+		{fetchedState && <Sliders fetchedState={fetchedState} snackbarError={snackbarError} />}
+		<Group>
+			<Cell expandable before={<Icon28Settings/>} onClick={go}>
+				settings
+			</Cell>
+		</Group>
 	</Panel>
 );
-
-const style = {
-
-}
-
 export default Home;

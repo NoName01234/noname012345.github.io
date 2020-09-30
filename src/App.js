@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import '@vkontakte/vkui/dist/vkui.css';
-import { View, Snackbar, Avatar } from '@vkontakte/vkui/'
+import { View, Snackbar, Avatar, FixedLayout } from '@vkontakte/vkui/'
 import Icon24Error from '@vkontakte/icons/dist/24/error'
 
 import Home from './panels/Home';
 import Intro from './panels/Intro';
+import Settings from './panels/Settings'
 
 const ROUTES = {
 	HOME: 'home',
 	INTRO: 'intro',
-};
-
-const EPICS = {
 	SETTINGS: 'settings',
-	HOME: 'home'
-}
+};
 
 const STORAGE_KEYS = { 
 	STATUS: 'status',
@@ -29,6 +26,8 @@ const App = () => {
 	const [snackbar, setSnackbar] = useState(null);
 	const [fetchedState, setFetchedState] = useState(false)
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+	const [userNotification, setUserNotification] = useState(false)
+	const [userNotificationOn, setUserNotificationOn] = useState(false)
 	const [userHasSeenIntro, setUserHasSeenIntro] = useState(false);
 
 	useEffect(() => {
@@ -58,8 +57,9 @@ const App = () => {
 							break;
 						case STORAGE_KEYS.STATE: 
 							setFetchedState(data[key])
+							break;
 						default:
-						break;
+							break;
 					}
 				}
 				catch(error){
@@ -82,6 +82,34 @@ const App = () => {
 	const go = panel => {
 		setActivePanel(panel);
 	};
+
+	const set = async function(){
+		await go(ROUTES.SETTINGS)
+	}
+
+	const ho = async function(){
+		await go(ROUTES.HOME)
+	}
+
+	const notification = async function(){
+		if(!userNotification && !userNotificationOn){
+			await 
+				bridge.send("VKWebAppAllowNotifications")
+					.then((result) => {
+						setUserNotification(true)
+						setUserNotificationOn(true)
+					})
+					.catch(err => console.log(err))
+		}
+		else{
+			await 
+				bridge.send("VKWebAppDenyNotifications")
+					.then((result) => {
+						setUserNotification(false)
+						setUserNotificationOn(false)
+					})
+		}
+	}
 
 	const viewIntro = async function () {
 		try { 
@@ -107,7 +135,8 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
-			<Home id={ROUTES.HOME} fetchedUser={fetchedUser} fetchedState={fetchedState} snackbarError={snackbar}/>
+			<Settings id={ROUTES.SETTINGS} go={ho} notification={notification} userNotificationOn={userNotificationOn}/>
+			<Home id={ROUTES.HOME} fetchedUser={fetchedUser} fetchedState={fetchedState} snackbarError={snackbar} go={set}/>
 			<Intro id={ROUTES.INTRO} fetchedUser={fetchedUser} go={viewIntro} snackbarError={snackbar} userHasSeenIntro={userHasSeenIntro}/>
 		</View>
 	);

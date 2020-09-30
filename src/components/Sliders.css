@@ -1,0 +1,24 @@
+.card {
+    background-color: white;
+    border: #d4d4d4 1px solid;
+    box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    color: white;
+}
+
+.card_text {
+    position: absolute;
+    margin-left: 10%;
+    margin-top: 10%;
+}
+
+.fantastic {
+    background: url('./img/fantastic.jpg');
+}
+
+.business {
+    background: url('./img/business.jpg');
+}
+
+.psychology {
+    background: url('./img/psychology.jpg');
+}
